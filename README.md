@@ -12,7 +12,7 @@ Backend Server of Logiclynxz Dashboard
 ### 1. Clone the repository
 ```bash
 git remote add origin https://github.com/Logiclynxz/logiclynxz-dashboard-backend.git
-cd your-repo-name
+cd logiclynxz-dashboard-backend
 git branch -M main
 ```
 ### 2. Clone the repository
@@ -57,8 +57,8 @@ npm run dev
 ### 4. Setting up environment variables
 Create a .env file in the root of your project and add your environment variables:
 ```env
-MONGO_URI=your_mongodb_connection_string
-PORT=3000
+MONGO_URI=mongodb+srv://<username>:<password>@marnapp.ppitasf.mongodb.net/logiclynxz-dashboard?retryWrites=true&w=majority&appName=marnapp
+PORT=5000
 ```
 
 ### 5. Create the main server file
