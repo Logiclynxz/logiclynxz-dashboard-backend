@@ -5,13 +5,15 @@ const {
   createUser,
   updateUser,
   archiveUser,
-  loginUser,
   getUser,
   getUsers,
+  deleteUser,
 } = require("../controllers/userController");
 // API
 
 router.post("/", createUser);
 router.get("/", getUsers);
+router.get("/:id", getUser);
+router.delete("/:id", deleteUser);
 
 module.exports = router;
