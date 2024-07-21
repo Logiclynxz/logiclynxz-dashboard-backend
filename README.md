@@ -11,9 +11,8 @@ Backend Server of Logiclynxz Dashboard
 
 ### 1. Clone the repository
 ```bash
-git remote add origin https://github.com/Logiclynxz/logiclynxz-dashboard-backend.git
+git clone https://github.com/Logiclynxz/logiclynxz-dashboard-backend.git
 cd logiclynxz-dashboard-backend
-git branch -M main
 ```
 ### 2. Clone the repository
 a. Initialize npm
