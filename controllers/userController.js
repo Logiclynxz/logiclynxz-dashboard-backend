@@ -10,16 +10,13 @@ const getUsers = async (req, res) => {
 const getUser = async (req, res) => {
   const { id } = req.params;
 
-  // Validate ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "Invalid user ID" });
   }
 
   try {
-    // Find user by ID
     const user = await User.findById(id);
 
-    // Check if user exists
     if (user) {
       return res.status(200).json(user);
     } else {
@@ -62,7 +59,56 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
+    const { username, email } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
+    const exists = await User.findOne({
+      $and: [{ $or: [{ username, email }] }, { _id: { $ne: id } }],
+    });
+
+    if (exists) {
+      return res
+        .status(400)
+        .json({ success:false, message: "Username and email already exists" });
+    }
+
+    const usernameExists = await User.findOne({
+      $and: [{ username }, { _id: { $ne: id } }],
+    });
+    if (usernameExists) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Username already exists" });
+    }
+
+    const emailExists = await User.findOne({
+      $and: [{ email }, { _id: { $ne: id } }],
+    });
+    if (emailExists) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email already exists" });
+    }
+
+    const user = await User.findByIdAndUpdate(id, req.body);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, message: "User updated successfully", user });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 };
 
 const archiveUser = async (req, res) => {
@@ -73,7 +119,6 @@ const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Use findByIdAndDelete to remove the user by ID
     const user = await User.findByIdAndDelete(id);
 
     if (user) {
@@ -86,14 +131,11 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {};
-
 module.exports = {
   getUser,
   getUsers,
   createUser,
   updateUser,
   archiveUser,
-  loginUser,
   deleteUser,
 };
