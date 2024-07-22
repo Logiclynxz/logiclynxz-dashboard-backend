@@ -16,15 +16,18 @@ const login = async (req, res) => {
           .status(200)
           .json({ message: "User authenticated", success: true });
       } else {
-        return res
-          .status(400)
-          .json({
-            message: "Invalid username/email or password",
-            success: false,
-          });
+        return res.status(400).json({
+          message: "Invalid username/email or password",
+          success: false,
+        });
       }
     } else {
-      return res.status(400).json({ message: 'Invalid username/email or password', success: false });
+      return res
+        .status(400)
+        .json({
+          message: "Invalid username/email or password",
+          success: false,
+        });
     }
   } catch (error) {
     return res
@@ -33,4 +36,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = login;
+module.exports = { login };

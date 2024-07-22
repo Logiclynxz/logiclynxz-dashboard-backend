@@ -15,7 +15,9 @@ app.use((req, res, next) => {
 
 // routes
 const userRoutes = require("./routes/users");
+const authRoutes = require("./routes/auth");
 app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 
 // connect to db
 mongoose
