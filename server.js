@@ -12,12 +12,11 @@ app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
 });
-const verifyJWT = require("./middleware/verifyJWT");
 
 // routes
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
-app.use("/api/users", verifyJWT, userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
 // connect to db
