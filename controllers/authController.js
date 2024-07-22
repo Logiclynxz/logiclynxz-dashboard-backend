@@ -138,7 +138,7 @@ const logout = async (req, res) => {
 
     return res.sendStatus(204);
   } else {
-    res.clearCookie("jwt", { httpOnly: true, secure: true }); // add secure: true in production
+    res.clearCookie("jwt", { httpOnly: true, secure: true }); 
     return res.sendStatus(204);
   }
 };
