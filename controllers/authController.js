@@ -25,7 +25,11 @@ const login = async (req, res) => {
           { expiresIn: "1d" }
         );
 
-        const user = await User.findByIdAndUpdate(user._id, { refreshToken });
+        const userWithUpdatedToken = await User.findByIdAndUpdate(user._id, { refreshToken }, { new: true });
+
+        if (!userWithUpdatedToken) {
+          return res.status(500).json({ message: "Failed to update user with refresh token" });
+        }
 
         res.cookie("jwt", refreshToken, {
           httpOnly: true,
@@ -33,7 +37,7 @@ const login = async (req, res) => {
         });
         return res
           .status(200)
-          .json({ message: "User authenticated", success: true, accessToken, refreshToken });
+          .json({ message: "User authenticated", success: true, accessToken });
       } else {
         return res.status(400).json({
           message: "Invalid username/email or password",
