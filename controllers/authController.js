@@ -75,7 +75,7 @@ const login = async (req, res) => {
         });
         return res
           .status(200)
-          .json({ message: "User authenticated", success: true, accessToken });
+          .json({ message: "User authenticated", success: true, accessToken, userWithUpdatedToken });
       } else {
         return res.status(400).json({
           message: "Invalid username/email or password",
