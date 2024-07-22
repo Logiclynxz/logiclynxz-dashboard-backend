@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const credentials = require("./middleware/credentials");
+const corsOptions = require("./config/corsOptions");
 
 //express app
 const app = express();
