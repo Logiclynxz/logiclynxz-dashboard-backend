@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const User = require("../models/UserModel");
 
 const login = async (req, res) => {
@@ -8,17 +9,27 @@ const login = async (req, res) => {
       $or: [{ username: usernameEmail }, { email: usernameEmail }],
     });
 
-    if (!user || user.password !== password) {
-      return res
-        .status(400)
-        .json({ message: "Invalid username/email or password" });
+    if (user) {
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (isMatch) {
+        return res
+          .status(200)
+          .json({ message: "User authenticated", success: true });
+      } else {
+        return res
+          .status(400)
+          .json({
+            message: "Invalid username/email or password",
+            success: false,
+          });
+      }
+    } else {
+      return res.status(400).json({ message: 'Invalid username/email or password', success: false });
     }
-
-    return res
-      .status(200)
-      .json({ message: "User authenticated", success: true });
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error", error });
   }
 };
 
