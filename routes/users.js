@@ -12,7 +12,7 @@ const {
 } = require("../controllers/userController");
 
 
-// router.use(verifyJWT);
+router.use(verifyJWT);
 
 // /api/users
 router.post("/", createUser);
