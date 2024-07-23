@@ -68,7 +68,7 @@ const login = async (req, res) => {
             .json({ message: "Failed to update user with refresh token" });
         }
 
-        res.cookie("jwt", refreshToken, {
+        res.cookie("accessToken", refreshToken, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
           secure: true,
@@ -124,21 +124,25 @@ const refreshToken = async (req, res) => {
 
 const logout = async (req, res) => {
   const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(204); // no content
-  console.log(cookies.jwt);
+  if (!cookies?.accessToken) return res.sendStatus(204); // no content
+  console.log(cookies.accessToken);
 
-  const refreshToken = cookies.jwt;
+  const refreshToken = cookies.accessToken;
 
   const user = await User.findOne({ refreshToken });
   if (user) {
     user.refreshToken = "";
     await user.save();
 
-    res.clearCookie("jwt", { httpOnly: true, secure: true });
+    res.clearCookie("accessToken", {
+      httpOnly: true, secure: true, sameSite: "None",
+    })
 
-    return res.sendStatus(204);
+    return res.sendStatus(201);
   } else {
-    res.clearCookie("jwt", { httpOnly: true, secure: true }); 
+    res.clearCookie("accessToken", {
+      httpOnly: true, secure: true, sameSite: "None",
+    })
     return res.sendStatus(204);
   }
 };
