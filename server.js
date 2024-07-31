@@ -15,8 +15,14 @@ app.use(credentials);
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
+// Logger middleware
 app.use((req, res, next) => {
-  console.log(req.path, req.method);
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    const clientIp = req.ip.includes('::ffff:') ? req.ip.split('::ffff:')[1] : req.ip;
+    console.log(`${clientIp} - ${req.method} ${req.path} ${res.statusCode} ${res.statusMessage} - ${duration} ms`);
+  });
   next();
 });
 
