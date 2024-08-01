@@ -22,8 +22,10 @@ app.use(requestLog);
 // routes
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
+const projectRoutes = require("./routes/projects");
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/projects", projectRoutes);
 
 // connect to db
 mongoose

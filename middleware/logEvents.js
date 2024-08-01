@@ -22,14 +22,16 @@ const logEvents = async (message, logFile) => {
 
 const requestLog = (req, res, next) => {
   const start = Date.now();
-  const duration = Date.now() - start;
-  const clientIp = req.ip.includes("::ffff:")
-    ? req.ip.split("::ffff:")[1]
-    : req.ip;
-  logEvents(
-    `${req.method}\t${req.headers.origin}\t${clientIp} - ${req.url} ${res.statusCode} ${res.statusMessage} - ${duration} ms`,
-    "reqLog.txt"
-  );
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+    const clientIp = req.ip.includes("::ffff:")
+      ? req.ip.split("::ffff:")[1]
+      : req.ip;
+    logEvents(
+      `${req.method}\t${req.headers.origin}\t${clientIp} - ${req.url} ${res.statusCode} ${res.statusMessage} - ${duration} ms`,
+      "reqLog.txt"
+    );
+  });
   next();
 };
 
