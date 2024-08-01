@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const credentials = require("./middleware/credentials");
 const corsOptions = require("./config/corsOptions");
+const { requestLog } = require("./middleware/logEvents");
 
 //express app
 const app = express();
@@ -16,15 +17,7 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 // Logger middleware
-app.use((req, res, next) => {
-  const start = Date.now();
-  res.on('finish', () => {
-    const duration = Date.now() - start;
-    const clientIp = req.ip.includes('::ffff:') ? req.ip.split('::ffff:')[1] : req.ip;
-    console.log(`${clientIp} - ${req.method} ${req.path} ${res.statusCode} ${res.statusMessage} - ${duration} ms`);
-  });
-  next();
-});
+app.use(requestLog);
 
 // routes
 const userRoutes = require("./routes/users");
